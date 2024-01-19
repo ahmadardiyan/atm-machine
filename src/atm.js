@@ -42,6 +42,7 @@ const actionMenu = async (option) => {
   } else if (option == 2) {
     console.log('Withdraw');
     console.log('=======================');
+    await withdrawMenu();
   } else if (option == 3) {
     console.log('Deposit');
     console.log('=======================');
@@ -53,8 +54,9 @@ const actionMenu = async (option) => {
     return;
   } else {
     console.log('please select the options menu');
-    await main();
   }
+
+  await getMenu();
 }
 
 const getMenu = async () => {
@@ -82,35 +84,57 @@ const balanceMenu = async () => {
   const balance = await getBalance();
 
   console.log(`Your balance is ${balance}`);
-  await getMenu()
 }
 
 const depositMenu = async () => {
+  const action = 'deposit';
   const value = await displayQuestion('Enter the amount to be deposit: ')  
-  const result = await createDeposit(value);
+
+  const result = await createTransaction({action, value});
 
   if (result) {
     console.log('create deposit is successfully');
-    // await balanceMenu();
   } else{
     console.log('create deposit is failed');
+  }
+}
+
+const checkNumberType = async ( value ) => {
+  if (isNaN(Number(value))) {
+    console.log('failed, your amount data is not a number!');
     await getMenu()
   }
 }
 
-const createDeposit = async (value) => {
+const createTransaction = async ({ action, value }) => {
   value = Number(value)
-
-  if ( isNaN(value) ) {
-    return false
-  }
-
-  listTransaction.push({
-    action: 'deposit',
+  await checkNumberType(value);
+  
+  const result = listTransaction.push({
+    action,
     value
   })
 
-  return true
+  return result ? true : false;
+}
+
+const withdrawMenu = async () => {
+  const action = 'withdraw';
+  const value = await displayQuestion('Enter the amount to be withdraw: ')  
+
+  const balance = await getBalance();
+  if (balance < value ) {
+    console.log('your balance less than the amount');
+    await getMenu();
+  }
+
+  const result = await createTransaction({ action, value });
+
+  if (result) {
+    console.log('create withdraw is successfully');
+  } else{
+    console.log('create withdraw is failed');
+  }
 }
 
 main = async () => {
