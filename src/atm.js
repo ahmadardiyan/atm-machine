@@ -49,6 +49,8 @@ const actionMenu = async (option) => {
     await depositMenu();
   } else if (option == 4) {
     console.log('Transfer');
+    console.log('=======================');
+    await transferMenu()
   } else if (option == 5) {
     console.log('Thank you, and see you~');
     return;
@@ -137,6 +139,25 @@ const withdrawMenu = async () => {
   }
 }
 
+const transferMenu = async () => {
+  const action = 'transfer';
+  const value = await displayQuestion('Enter the amount to be transfer: ')  
+
+  const balance = await getBalance();
+  if (balance < value ) {
+    console.log('your balance less than the amount');
+    await getMenu();
+  }
+
+  const result = await createTransaction({ action, value });
+
+  if (result) {
+    console.log('create transfer is successfully');
+  } else{
+    console.log('create transfer is failed');
+  }
+}
+
 main = async () => {
   console.log('=======================');
   console.log('Welcome to ATM Machine!');
@@ -153,7 +174,7 @@ main = async () => {
       console.log(counter);
       await main();
     } else {
-      console.log('failed, you have tried 3 times!');
+      console.log(`failed, you have tried ${MAX_COUNT} times!`);
     }
   }
 
