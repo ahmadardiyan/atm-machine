@@ -9,11 +9,7 @@ const PIN = '123456',
 MAX_COUNT = 3;
 
 let counter = 1;
-let listTransaction = [
-  { action: 'deposit', value: 5000},
-  { action: 'withdraw', value: 1000},
-  { action: 'transfer', value: 500}
-]
+let listTransaction = []
 
 const displayQuestion = (question) => {
   return new Promise ( resolve => {
@@ -52,8 +48,12 @@ const actionMenu = async (option) => {
     console.log('=======================');
     await transferMenu()
   } else if (option == 5) {
+    console.log('Mutation');
+    console.log('=======================');
+    await mutationMenu()
+  } else if (option == 6) {
     console.log('Thank you, and see you~');
-    return;
+    return main();
   } else {
     console.log('please select the options menu');
   }
@@ -155,6 +155,14 @@ const transferMenu = async () => {
     console.log('create transfer is successfully');
   } else{
     console.log('create transfer is failed');
+  }
+}
+
+const mutationMenu = async () => {
+  if (listTransaction.length <= 0) console.log('you do not have transaction'); 
+
+  for ( const [index, item] of listTransaction.reverse().entries()) {
+    console.log(`${index + 1} | ${item.action} | ${item.value} `);
   }
 }
 
