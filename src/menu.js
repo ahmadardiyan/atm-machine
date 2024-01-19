@@ -4,6 +4,7 @@ const menu = () => {
     2. Withdraw
     3. Deposit
     4. Transfer
+    5. Exit
   `);
 }
 
